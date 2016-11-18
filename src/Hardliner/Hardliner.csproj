@@ -37,14 +37,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Hardliner.Core.Program</StartupObject>
+    <StartupObject>Core</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Program.cs" />
+    <Compile Include="Core\Core.cs" />
+    <Compile Include="Core\GameController.cs" />
+    <Compile Include="TextureFactory.cs" />
+    <Compile Include="Screens\Game\GameScreen.cs" />
+    <Compile Include="Screens\Game\ObserverCamera.cs" />
+    <Compile Include="Screens\Game\Player.cs" />
+    <Compile Include="Screens\Game\FirstPersonCamera.cs" />
+    <Compile Include="Screens\Game\TestFloor.cs" />
+    <Compile Include="Screens\Game\TestTreeLog.cs" />
+    <Compile Include="Screens\Screen.cs" />
+    <Compile Include="Screens\ScreenManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="JoltNet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -58,7 +68,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="..\Hardliner.Content\Content.mgcb">
+    <MonoGameContentReference Include="..\Hardliner.Content\Content\Content.mgcb">
       <Link>Content.mgcb</Link>
     </MonoGameContentReference>
   </ItemGroup>
@@ -67,7 +77,12 @@
       <Project>{5fc4340b-1909-43e4-a4f9-a5b8b1c8a61d}</Project>
       <Name>Hardliner.Content</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Hardliner.Engine\Hardliner.Engine.csproj">
+      <Project>{1c6fd57f-3493-4b80-94a3-742cf373e7c3}</Project>
+      <Name>Hardliner.Engine</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
