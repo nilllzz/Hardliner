@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Core\Core.cs" />
     <Compile Include="Core\GameController.cs" />
+    <Compile Include="Screens\Game\FirstPersonUI.cs" />
     <Compile Include="TextureFactory.cs" />
     <Compile Include="Screens\Game\GameScreen.cs" />
     <Compile Include="Screens\Game\ObserverCamera.cs" />

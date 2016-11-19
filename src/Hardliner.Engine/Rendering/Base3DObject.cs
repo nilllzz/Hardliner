@@ -15,6 +15,7 @@ namespace Hardliner.Engine.Rendering
         public bool IsDisposed { get; private set; }
         public virtual IdentifiedTexture Texture => null;
         protected GraphicsDevice GraphicsDevice { get; private set; }
+        public bool IsVisible { get; set; } = true;
 
         private static VertexDeclaration GetVertexDeclaration()
             => (VertexDeclaration)typeof(VertexType).GetField(FIELD_NAME_VERTEXDECLARATION).GetValue(null);

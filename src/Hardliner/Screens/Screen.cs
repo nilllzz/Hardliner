@@ -14,7 +14,8 @@ namespace Hardliner.Screens
         protected Screen PreScreen { get; private set; }
         internal bool IsDisposed { get; private set; }
 
-        internal abstract void Draw();
+        internal virtual void Draw() { }
+        internal abstract void Render();
         internal abstract void Update();
 
         internal virtual void Activate(Screen preScreen)

@@ -4,11 +4,16 @@ namespace Hardliner.Engine.Rendering.Geometry.Texture
 {
     public class GeometryTextureMultiplier : IGeometryTextureDefintion
     {
-        private readonly float _multiplier;
+        private readonly Vector2 _multiplier;
 
-        public GeometryTextureMultiplier(float repeatTexture = 1f)
+        public GeometryTextureMultiplier(float multiplier)
         {
-            _multiplier = repeatTexture;
+            _multiplier = new Vector2(multiplier);
+        }
+
+        public GeometryTextureMultiplier(Vector2 multiplier)
+        {
+            _multiplier = multiplier;
         }
 
         public Vector2 Transform(Vector2 normalVector)

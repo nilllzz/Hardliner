@@ -9,6 +9,7 @@ namespace Hardliner.Engine.Rendering
         IndexBuffer IndexBuffer { get; set; }
         Matrix World { get; set; }
         IdentifiedTexture Texture { get; }
+        bool IsVisible { get; set; }
 
         void Update();
     }

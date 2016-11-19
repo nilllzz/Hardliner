@@ -19,6 +19,12 @@ namespace Hardliner.Engine.Rendering.Geometry.Texture
              : this(textureRectangle, texture.Bounds)
         { }
 
+        public GeometryTextureRectangle(float x, float y, float width, float height)
+        {
+            _textureStart = new Vector2(x, y);
+            _textureEnd = new Vector2(width, height);
+        }
+
         public Vector2 Transform(Vector2 normalVector)
             => _textureStart + normalVector * _textureEnd;
 

@@ -43,8 +43,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Base3DObject.cs" />
     <Compile Include="Rendering\Geometry\Composers\CircleComposer.cs" />
+    <Compile Include="Rendering\Geometry\Composers\CuboidComposer.cs" />
     <Compile Include="Rendering\Geometry\Composers\CylinderComposer.cs" />
+    <Compile Include="Rendering\Geometry\Texture\CuboidSide.cs" />
     <Compile Include="Rendering\Geometry\Texture\DefaultGeometryTextureDefinition.cs" />
+    <Compile Include="Rendering\Geometry\Texture\GeometryTextureCuboidWrapper.cs" />
     <Compile Include="Rendering\Geometry\Texture\GeometryTextureMultiplier.cs" />
     <Compile Include="Rendering\Geometry\Texture\GeometryTexturePoleWrapper.cs" />
     <Compile Include="Rendering\Geometry\Texture\GeometryTextureRectangle.cs" />
@@ -55,6 +58,8 @@
     <Compile Include="Rendering\I3DObject.cs" />
     <Compile Include="Rendering\Geometry.cs" />
     <Compile Include="Rendering\ObjectRenderer.cs" />
+    <Compile Include="Rendering\Sprites\ShapeRenderer.cs" />
+    <Compile Include="Rendering\Sprites\SpriteBatchExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

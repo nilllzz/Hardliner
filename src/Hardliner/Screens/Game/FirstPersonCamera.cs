@@ -1,4 +1,5 @@
 ﻿using Hardliner.Engine;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using static Core;
 
@@ -23,7 +24,7 @@ namespace Hardliner.Screens.Game
         
         public override void Update()
         {
-            Position = _player.Position;
+            Position = _player.Position + new Vector3(0, Player.HEIGHT, 0);
             Yaw = _player.Yaw;
             Pitch = _player.Pitch;
 

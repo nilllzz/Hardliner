@@ -51,5 +51,10 @@ namespace Hardliner.Screens
         {
             _screens.LastOrDefault()?.Draw();
         }
+
+        internal void Render()
+        {
+            _screens.LastOrDefault()?.Render();
+        }
     }
 }

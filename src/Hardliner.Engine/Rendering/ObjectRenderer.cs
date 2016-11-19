@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Hardliner.Engine.Rendering
@@ -37,7 +38,7 @@ namespace Hardliner.Engine.Rendering
 
             lock (Objects)
             {
-                foreach (var o in Objects)
+                foreach (var o in Objects.Where(o => o.IsVisible))
                 {
                     _effect.World = o.World;
 

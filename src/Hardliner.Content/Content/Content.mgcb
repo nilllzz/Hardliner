@@ -12,6 +12,12 @@
 
 
 #---------------------------------- Content ---------------------------------#
+#begin Fonts/UIFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Fonts/UIFont.spritefont
+
 #begin Textures/Grid.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -36,6 +42,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Leaves.png
 
+#begin Textures/Rope.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Rope.png
+
 #begin Textures/TreeLog.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -47,4 +65,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/TreeLog.png
+
+#begin Textures/UIOverlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/UIOverlay.png
 

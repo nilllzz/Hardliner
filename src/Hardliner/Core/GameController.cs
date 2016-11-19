@@ -20,6 +20,10 @@ namespace Hardliner.Core
         {
             GraphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            GraphicsDeviceManager.PreferredBackBufferWidth = 1280;
+            GraphicsDeviceManager.PreferredBackBufferHeight = 720;
+            GraphicsDeviceManager.ApplyChanges();
         }
 
         protected override void Initialize()
@@ -27,12 +31,8 @@ namespace Hardliner.Core
             LoadComponents();
 
             base.Initialize();
-            
+
             _viewportBounds = GraphicsDevice.Viewport.Bounds;
-            GraphicsDevice.SamplerStates[0] = new SamplerState
-            {
-                Filter = TextureFilter.Point
-            };
         }
 
         private void LoadComponents()
@@ -69,10 +69,18 @@ namespace Hardliner.Core
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
-            GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.None };
-
             GetComponent<ScreenManager>().Draw();
+
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.LightBlue, 1.0f, 0);
+            GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.None };
+            GraphicsDevice.SamplerStates[0] = new SamplerState
+            {
+                Filter = TextureFilter.Point
+            };
+            GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            GetComponent<ScreenManager>().Render();
 
             base.Draw(gameTime);
         }
