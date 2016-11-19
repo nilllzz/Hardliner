@@ -33,7 +33,7 @@ namespace Hardliner.Screens.Game
             log.LoadContent(GameInstance.GraphicsDevice);
             _floorRenderer.Objects.Add(log);
 
-            _player = new Player(new Vector3(0, 4, 0));
+            _player = new Player(new Vector3(0, 4, 0), this);
             _player.LoadContent(GameInstance.GraphicsDevice);
             _floorRenderer.Objects.Add(_player);
 
@@ -60,5 +60,14 @@ namespace Hardliner.Screens.Game
             _floorRenderer.Update();
             _camera.Update();
         }
+
+        internal void AddObject(I3DObject obj)
+        {
+            obj.LoadContent(GameInstance.GraphicsDevice);
+            _floorRenderer.Objects.Insert(0, obj);
+            Console.WriteLine("ADD");
+        }
+
+        internal bool HasRope => _floorRenderer.Objects.Any(o => o.GetType() == typeof(Rope));
     }
 }

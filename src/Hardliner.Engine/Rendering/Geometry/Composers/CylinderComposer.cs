@@ -19,7 +19,7 @@ namespace Hardliner.Engine.Rendering.Geometry.Composers
         {
             var vertices = new List<VertexPositionNormalTexture>();
 
-            var sides = PoleComposer.Create(radius, height, edgeCount, sideTexture);
+            var sides = TubeComposer.Create(radius, height, edgeCount, sideTexture);
             var end1 = CircleComposer.Create(radius, edgeCount, endTexture);
             var end2 = CircleComposer.Create(radius, edgeCount, endTexture);
 

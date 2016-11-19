@@ -1,4 +1,5 @@
 ﻿using System;
+using Hardliner.Engine.Collision;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,6 +9,8 @@ namespace Hardliner.Engine.Rendering
     {
         private const string FIELD_NAME_VERTEXDECLARATION = "VertexDeclaration";
 
+        protected bool _dynamicBuffers = false;
+
         public Geometry<VertexType> Geometry { get; protected set; } = new Geometry<VertexType>();
         public VertexBuffer VertexBuffer { get; set; }
         public IndexBuffer IndexBuffer { get; set; }
@@ -16,10 +19,11 @@ namespace Hardliner.Engine.Rendering
         public virtual IdentifiedTexture Texture => null;
         protected GraphicsDevice GraphicsDevice { get; private set; }
         public bool IsVisible { get; set; } = true;
+        public ICollider Collider { get; set; } = new NoCollider();
 
         private static VertexDeclaration GetVertexDeclaration()
             => (VertexDeclaration)typeof(VertexType).GetField(FIELD_NAME_VERTEXDECLARATION).GetValue(null);
-        
+
         public virtual void LoadContent(GraphicsDevice device)
         {
             GraphicsDevice = device;
@@ -35,11 +39,23 @@ namespace Hardliner.Engine.Rendering
         {
             var vertices = Geometry.Vertices;
             var indices = Geometry.Indices;
-            
-            VertexBuffer = new VertexBuffer(GraphicsDevice, GetVertexDeclaration(), vertices.Length, BufferUsage.WriteOnly);
-            VertexBuffer.SetData(vertices);
 
-            IndexBuffer = new IndexBuffer(GraphicsDevice, typeof(int), indices.Length, BufferUsage.WriteOnly);
+            if (VertexBuffer == null || IndexBuffer == null || 
+                VertexBuffer.VertexCount != vertices.Length || IndexBuffer.IndexCount != indices.Length)
+            {
+                if (_dynamicBuffers)
+                {
+                    VertexBuffer = new DynamicVertexBuffer(GraphicsDevice, GetVertexDeclaration(), vertices.Length, BufferUsage.WriteOnly);
+                    IndexBuffer = new DynamicIndexBuffer(GraphicsDevice, typeof(int), indices.Length, BufferUsage.WriteOnly);
+                }
+                else
+                {
+                    VertexBuffer = new VertexBuffer(GraphicsDevice, GetVertexDeclaration(), vertices.Length, BufferUsage.WriteOnly);
+                    IndexBuffer = new IndexBuffer(GraphicsDevice, typeof(int), indices.Length, BufferUsage.WriteOnly);
+                }
+            }
+            
+            VertexBuffer.SetData(vertices);
             IndexBuffer.SetData(indices);
         }
 

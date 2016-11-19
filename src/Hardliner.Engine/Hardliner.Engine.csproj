@@ -39,6 +39,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="Collision\BoxCollider.cs" />
+    <Compile Include="Collision\ICollider.cs" />
+    <Compile Include="Collision\NoCollider.cs" />
+    <Compile Include="Collision\SphereCollider.cs" />
     <Compile Include="IdentifiedTexture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Base3DObject.cs" />
@@ -52,7 +56,7 @@
     <Compile Include="Rendering\Geometry\Texture\GeometryTexturePoleWrapper.cs" />
     <Compile Include="Rendering\Geometry\Texture\GeometryTextureRectangle.cs" />
     <Compile Include="Rendering\Geometry\Texture\IGeometryTextureDefintion.cs" />
-    <Compile Include="Rendering\Geometry\Composers\PoleComposer.cs" />
+    <Compile Include="Rendering\Geometry\Composers\TubeComposer.cs" />
     <Compile Include="Rendering\Geometry\Composers\RectangleComposer.cs" />
     <Compile Include="Rendering\Geometry\VertexTransformer.cs" />
     <Compile Include="Rendering\I3DObject.cs" />

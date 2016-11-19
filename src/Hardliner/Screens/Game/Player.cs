@@ -12,11 +12,12 @@ namespace Hardliner.Screens.Game
     {
         internal const float HEIGHT = 1.6f;
 
-        private const float SPEED = 0.08f;
+        private const float MAX_SPEED = 0.11f;
         private const float SLOWDOWN = 0.005f;
         internal const float MIN_JUMPCHARGE = 0.1f;
         internal const float MAX_JUMPCHARGE = 0.5f;
 
+        private readonly GameScreen _screen;
         private IdentifiedTexture _texture;
         private Vector3 _position;
         private Vector3 _velocity;
@@ -28,10 +29,13 @@ namespace Hardliner.Screens.Game
         internal float JumpCharge => _jumpCharge;
         public override IdentifiedTexture Texture => _texture;
 
-        public Player(Vector3 position)
+        public Player(Vector3 position, GameScreen screen)
         {
+            _screen = screen;
             _texture = new IdentifiedTexture(TextureFactory.FromColor(Color.DarkGray));
             _position = position;
+
+            IsVisible = false;
         }
 
         protected override void CreateWorld()
@@ -55,7 +59,8 @@ namespace Hardliner.Screens.Game
             Jump();
             Velocity();
             Gravity();
-
+            Rope();
+            
             CreateWorld();
         }
 
@@ -65,21 +70,21 @@ namespace Hardliner.Screens.Game
             Vector2 movement = gState.ThumbSticks.Left * new Vector2(0.02f, 0.008f);
             
             _velocity += new Vector3(movement.X, 0f, -movement.Y);
-            if (_velocity.X > SPEED)
+            if (_velocity.X > MAX_SPEED)
             {
-                _velocity.X = SPEED;
+                _velocity.X = MAX_SPEED;
             }
-            else if (_velocity.X < -SPEED)
+            else if (_velocity.X < -MAX_SPEED)
             {
-                _velocity.X = -SPEED;
+                _velocity.X = -MAX_SPEED;
             }
-            if (_velocity.Z > SPEED)
+            if (_velocity.Z > MAX_SPEED)
             {
-                _velocity.Z = SPEED;
+                _velocity.Z = MAX_SPEED;
             }
-            else if (_velocity.Z < -SPEED)
+            else if (_velocity.Z < -MAX_SPEED)
             {
-                _velocity.Z = -SPEED;
+                _velocity.Z = -MAX_SPEED;
             }
 
             if (_position.Y == 0f)
@@ -166,6 +171,15 @@ namespace Hardliner.Screens.Game
             var transformedVelocity = Vector3.Transform(_velocity, rotation);
 
             _position += transformedVelocity;
+        }
+
+        private void Rope()
+        {
+            var gState = GamePad.GetState(PlayerIndex.One);
+            if (gState.Triggers.Right != 0f && !_screen.HasRope)
+            {
+                _screen.AddObject(new Rope(_screen.Content, this));
+            }
         }
     }
 }

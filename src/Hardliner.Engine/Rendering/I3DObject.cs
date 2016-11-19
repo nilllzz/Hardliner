@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Hardliner.Engine.Collision;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Hardliner.Engine.Rendering
@@ -10,7 +11,9 @@ namespace Hardliner.Engine.Rendering
         Matrix World { get; set; }
         IdentifiedTexture Texture { get; }
         bool IsVisible { get; set; }
+        ICollider Collider { get; set; }
 
         void Update();
+        void LoadContent(GraphicsDevice device);
     }
 }

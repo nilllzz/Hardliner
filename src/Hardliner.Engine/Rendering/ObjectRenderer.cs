@@ -26,8 +26,10 @@ namespace Hardliner.Engine.Rendering
         {
             lock (Objects)
             {
-                foreach (var obj in Objects)
-                    obj.Update();
+                for (int i = 0; i < Objects.Count; i++)
+                {
+                    Objects[i].Update();
+                }
             }
         }
 

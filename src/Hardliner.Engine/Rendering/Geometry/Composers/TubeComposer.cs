@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Hardliner.Engine.Rendering.Geometry.Composers
 {
-    public static class PoleComposer
+    public static class TubeComposer
     {
         public static VertexPositionNormalTexture[] Create(float radius, float height, int edgeCount)
             => Create(radius, height, edgeCount, DefaultGeometryTextureDefinition.Instance);
