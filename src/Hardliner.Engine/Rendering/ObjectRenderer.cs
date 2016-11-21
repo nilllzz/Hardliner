@@ -11,7 +11,6 @@ namespace Hardliner.Engine.Rendering
         private BasicEffect _effect;
 
         protected GraphicsDevice GraphicsDevice { get; private set; }
-        public List<I3DObject> Objects { get; private set; } = new List<I3DObject>();
         public bool IsDisposed { get; private set; }
 
         public virtual void LoadContent(GraphicsDevice device)
@@ -21,26 +20,15 @@ namespace Hardliner.Engine.Rendering
             _effect = new BasicEffect(GraphicsDevice);
             _effect.TextureEnabled = true;
         }
-
-        public virtual void Update()
-        {
-            lock (Objects)
-            {
-                for (int i = 0; i < Objects.Count; i++)
-                {
-                    Objects[i].Update();
-                }
-            }
-        }
-
-        public virtual void Draw(Camera camera)
+        
+        public virtual void Render(IEnumerable<I3DObject> objects, Camera camera)
         {
             _effect.View = camera.View;
             _effect.Projection = camera.Projection;
 
-            lock (Objects)
+            lock (objects)
             {
-                foreach (var o in Objects.Where(o => o.IsVisible))
+                foreach (var o in objects.Where(o => o.IsVisible))
                 {
                     _effect.World = o.World;
 
@@ -83,7 +71,6 @@ namespace Hardliner.Engine.Rendering
                 }
 
                 _effect = null;
-                Objects = null;
 
                 IsDisposed = true;
             }

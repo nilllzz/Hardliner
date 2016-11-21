@@ -16,7 +16,7 @@ using static Core;
 
 namespace Hardliner.Screens.Game
 {
-    internal class FirstPersonUI : Base3DObject<VertexPositionNormalTexture>
+    internal class FirstPersonUI : LevelObject
     {
         private const float WIDTH = 0.4f;
         private const float HEIGHT = 0.28f;
@@ -27,11 +27,42 @@ namespace Hardliner.Screens.Game
         private readonly Player _player;
         private SpriteBatch _uiBatch;
         private RenderTarget2D _target;
-        private SpriteFont _font;
+        private SpriteFont _uiFont, _introFont;
+        private Texture2D[] _noise;
+        private ulong _hookShotMessageColor = 0;
+
+        private readonly string[] _bootTexts = new[]
+        {
+            "",
+            "",
+            "",
+            "",
+            "Hello World",
+            "Loading...",
+            "Boot Sequence initiated",
+            "OS Core loaded",
+            "Accessed update submodule",
+            "Recalculated objective trackKeeper",
+            "Analyzed infrastructure data",
+            "Connection speed tested",
+            "Piped data to martial core",
+            "Life support systems online",
+            "Enabled hook shot",
+            "Checking for faulty hardware",
+            "Report: Positive outcome.",
+            "Hardware 100% operational.",
+            "Initialized combatSuit.py...",
+            "Loaded UI display font.",
+            "",
+            "",
+            "",
+            "",
+        };
 
         public override IdentifiedTexture Texture => _texture;
 
-        public FirstPersonUI(ContentManager content, Player player)
+        public FirstPersonUI(Level level, ContentManager content, Player player)
+            : base(level)
         {
             _player = player;
             _uiBatch = new SpriteBatch(GameInstance.GraphicsDevice);
@@ -39,9 +70,34 @@ namespace Hardliner.Screens.Game
                 GameInstance.Window.ClientBounds.Width, GameInstance.Window.ClientBounds.Height);
 
             _uiOverlay = content.Load<Texture2D>(Resources.Textures.UIOverlay);
-            _font = content.Load<SpriteFont>(Resources.Fonts.UIFont);
+            _uiFont = content.Load<SpriteFont>(Resources.Fonts.UIFont);
+            _introFont = content.Load<SpriteFont>(Resources.Fonts.IntroFont);
             _texture = new IdentifiedTexture(_target);
+
+            GenerateNoise();
         }
+
+        private void GenerateNoise()
+        {
+            const int width = 400, height = 280;
+            var random = new Random();
+
+            _noise = new Texture2D[5];
+            for (int i = 0; i < _noise.Length; i++)
+            {
+                var texture = new Texture2D(GameInstance.GraphicsDevice, width, height);
+                var data = new Color[width * height];
+                for (int j = 0; j < data.Length; j++)
+                {
+                    var value = random.Next(10, 50) * 5;
+                    data[j] = new Color(value, value, value);
+                }
+                texture.SetData(data);
+                _noise[i] = texture;
+            }
+        }
+
+        private int _introAlpha = 255;
 
         internal void DrawTexture()
         {
@@ -50,7 +106,43 @@ namespace Hardliner.Screens.Game
 
             _uiBatch.Begin(blendState: BlendState.NonPremultiplied);
 
-            _uiBatch.Draw(_uiOverlay, new Rectangle(0, 0, GameInstance.Window.ClientBounds.Width, GameInstance.Window.ClientBounds.Height), new Color(255, 255, 255, 120));
+            _uiBatch.Draw(_uiOverlay, GameInstance.Bounds, new Color(255, 255, 255, 120));
+
+            DrawRopeStats();
+            DrawJumpStats();
+            DrawBoot();
+
+            _uiBatch.End();
+
+            GameInstance.GraphicsDevice.SetRenderTarget(null);
+        }
+
+        private void DrawRopeStats()
+        {
+            if (_level.HasRope)
+            {
+                var textSize = _introFont.MeasureString("ACQUIRING TARGET...") * 0.5f;
+                var yellow = new Color(249, 201, 0, (int)(_hookShotMessageColor % 255));
+
+                _uiBatch.DrawString(_introFont, "ACQUIRING TARGET...", 
+                    new Vector2(GameInstance.Bounds.Width / 2f - textSize.X / 2f, 48), 
+                    yellow, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+
+                var rope = _level.Objects.First(o => o is HookShotRope) as HookShotRope;
+                var lengthPercent = rope.Length / HookShotRope.MAX_LENGTH;
+
+                _uiBatch.DrawRectangle(
+                    new Rectangle(GameInstance.Bounds.Width / 2 - 150, 80, 300, 20), 
+                    Color.Black);
+                _uiBatch.DrawRectangle(
+                    new Rectangle(GameInstance.Bounds.Width / 2 - 148, 82, (int)(lengthPercent * 296), 16),
+                    yellow);
+            }
+        }
+
+        private void DrawJumpStats()
+        {
+            _uiBatch.DrawRectangle(new Rectangle(64, 64, 200, 10), new Color(200, 200, 200, 50));
 
             if (_player.JumpCharge > 0f)
             {
@@ -59,31 +151,58 @@ namespace Hardliner.Screens.Game
                 if (length > 200)
                     length = 200;
 
-                _uiBatch.DrawRectangle(new Rectangle(64, 64, 200, 10), new Color(255, 255, 255, 100));
-                _uiBatch.DrawRectangle(new Rectangle(64, 64, length, 10), new Color(200, 200, 200));
+                _uiBatch.DrawRectangle(new Rectangle(64, 64, length, 10), new Color(255, 255, 255));
             }
-            else
+
+            _uiBatch.DrawString(_introFont, Math.Round(_player.Position.Y * 3.28084f, 1) + " ft.",
+                new Vector2(64, 32), new Color(255, 255, 255, 50), 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
+            _uiBatch.DrawString(_introFont, Math.Round(_player.Velocity.Z * -100f, 1) + " mph",
+                new Vector2(170, 32), new Color(255, 255, 255, 50), 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
+            _uiBatch.DrawRectangle(new Rectangle(GameInstance.Bounds.Width / 2 - 2,
+                GameInstance.Bounds.Height / 2 - 8, 4, 16), Color.White);
+            _uiBatch.DrawRectangle(new Rectangle(GameInstance.Bounds.Width / 2 - 8,
+                GameInstance.Bounds.Height / 2 - 2, 16, 4), Color.White);
+        }
+
+        private void DrawBoot()
+        {
+            if (_introAlpha > 0)
             {
-                _uiBatch.DrawRectangle(new Rectangle(64, 64, 200, 10), new Color(200, 200, 200, 50));
+                var bootItems = new List<string>();
+                var limit = (1 - (_introAlpha / 255f)) * (_bootTexts.Length);
+
+                for (int i = 0; i < limit; i++)
+                    bootItems.Add(_bootTexts[i]);
+
+                while (bootItems.Count > 7)
+                    bootItems.RemoveAt(0);
+
+                _uiBatch.DrawString(_uiFont, string.Join("\n", bootItems.ToArray()),
+                    new Vector2(GameInstance.Bounds.Width / 2f - 240, 170),
+                    new Color(255, 255, 255, _introAlpha), 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0f);
+
+                _uiBatch.Draw(_noise[_introAlpha % (_noise.Length * 3) / 3],
+                    GameInstance.Bounds, new Color(80, 80, 80, _introAlpha));
             }
-
-            _uiBatch.DrawString(_font, Math.Round(_player.Position.Y * 3.28084f, 1) + " ft.", new Vector2(64, 46), Color.White);
-
-            _uiBatch.End();
-
-            GameInstance.GraphicsDevice.SetRenderTarget(null);
         }
 
         public override void Update()
         {
+            if (_introAlpha > 0)
+                _introAlpha--;
+
+            _hookShotMessageColor += 20;
+
             CreateWorld();
         }
 
         protected override void CreateWorld()
         {
             var rotation = Matrix.CreateFromYawPitchRoll(_player.Yaw, _player.Pitch, 0f);
-            var transformed = Vector3.Transform(new Vector3(0, 0, -0.25f), rotation);
-            
+            var transformed = Vector3.Transform(new Vector3(0, 0, (1 - _introAlpha / 255f) * -0.25f), rotation);
+
             World = rotation * Matrix.CreateTranslation(_player.Position + new Vector3(0, Player.HEIGHT, 0) + transformed);
         }
 

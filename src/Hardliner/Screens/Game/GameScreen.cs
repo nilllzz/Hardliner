@@ -14,32 +14,26 @@ namespace Hardliner.Screens.Game
 {
     internal class GameScreen : Screen
     {
-        private ObjectRenderer _floorRenderer = new ObjectRenderer();
         private Player _player;
         private Camera _camera;
         private FirstPersonUI _ui;
+        private Level _level;
 
         internal override void Activate(Screen preScreen)
         {
             base.Activate(preScreen);
 
-            _floorRenderer.LoadContent(GameInstance.GraphicsDevice);
+            _level = new Level();
 
-            var floor = new TestFloor(Content);
-            floor.LoadContent(GameInstance.GraphicsDevice);
-            _floorRenderer.Objects.Add(floor);
+            var floor = new TestFloor(_level, Content);
+            _player = new Player(_level, new Vector3(0, 0, 0), this);
+            _ui = new FirstPersonUI(_level, Content, _player);
 
-            var log = new TestTreeLog(Content, new Vector3(0, 1, 0));
-            log.LoadContent(GameInstance.GraphicsDevice);
-            _floorRenderer.Objects.Add(log);
+            var log = new TestTreeLog(_level, Content, new Vector3(0, 1, -5));
+            var log1 = new TestTreeLog(_level, Content, new Vector3(0, 2, -8));
+            var log2 = new TestTreeLog(_level, Content, new Vector3(0, 3, -12));
 
-            _player = new Player(new Vector3(0, 4, 0), this);
-            _player.LoadContent(GameInstance.GraphicsDevice);
-            _floorRenderer.Objects.Add(_player);
-
-            _ui = new FirstPersonUI(Content, _player);
-            _ui.LoadContent(GameInstance.GraphicsDevice);
-            _floorRenderer.Objects.Add(_ui);
+            _level.LoadContent(new LevelObject[] { floor, log, log1, log2, _player, _ui });
 
             _camera = new FirstPersonCamera(GameInstance.GraphicsDevice, _player);
             //_camera = new ObserverCamera(GameInstance.GraphicsDevice);
@@ -52,22 +46,13 @@ namespace Hardliner.Screens.Game
 
         internal override void Render()
         {
-            _floorRenderer.Draw(_camera);
+            _level.Render(_camera);
         }
         
         internal override void Update()
         {
-            _floorRenderer.Update();
+            _level.Update();
             _camera.Update();
         }
-
-        internal void AddObject(I3DObject obj)
-        {
-            obj.LoadContent(GameInstance.GraphicsDevice);
-            _floorRenderer.Objects.Insert(0, obj);
-            Console.WriteLine("ADD");
-        }
-
-        internal bool HasRope => _floorRenderer.Objects.Any(o => o.GetType() == typeof(Rope));
     }
 }

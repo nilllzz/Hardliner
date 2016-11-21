@@ -2,6 +2,8 @@
 {
     public class NoCollider : ICollider
     {
-        public bool Collide(ICollider collider) => false;
+        public float Top => 0;
+        public float Bottom => 0;
+        public bool Collides(ICollider collider) => false;
     }
 }

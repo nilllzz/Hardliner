@@ -1,5 +1,6 @@
 ﻿using Hardliner.Content;
 using Hardliner.Engine;
+using Hardliner.Engine.Collision;
 using Hardliner.Engine.Rendering;
 using Hardliner.Engine.Rendering.Geometry.Composers;
 using Hardliner.Engine.Rendering.Geometry.Texture;
@@ -9,17 +10,20 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Hardliner.Screens.Game
 {
-    internal class TestTreeLog : Base3DObject<VertexPositionNormalTexture>
+    internal class TestTreeLog : LevelObject
     {
         private ContentManager _content;
         private IdentifiedTexture _texture;
         private Vector3 _position;
 
-        public TestTreeLog(ContentManager content, Vector3 position)
+        public TestTreeLog(Level level, ContentManager content, Vector3 position)
+            : base(level)
         {
             _content = content;
             _position = position;
             _texture = new IdentifiedTexture(content.Load<Texture2D>(Resources.Textures.TreeLog));
+
+            Collider = new BoxCollider(position, new Vector3(1, 2, 1));
         }
 
         public override IdentifiedTexture Texture => _texture;

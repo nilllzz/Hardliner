@@ -1,5 +1,6 @@
 ﻿using System;
 using Hardliner.Engine;
+using Hardliner.Engine.Collision;
 using Hardliner.Engine.Rendering;
 using Hardliner.Engine.Rendering.Geometry.Composers;
 using Microsoft.Xna.Framework;
@@ -8,34 +9,43 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Hardliner.Screens.Game
 {
-    internal class Player : Base3DObject<VertexPositionNormalTexture>
+    internal class Player : LevelObject
     {
         internal const float HEIGHT = 1.6f;
 
-        private const float MAX_SPEED = 0.11f;
+        private const float MAX_SPEED = 0.2f;
         private const float SLOWDOWN = 0.005f;
         internal const float MIN_JUMPCHARGE = 0.1f;
         internal const float MAX_JUMPCHARGE = 0.5f;
 
         private readonly GameScreen _screen;
         private IdentifiedTexture _texture;
-        private Vector3 _position;
         private Vector3 _velocity;
         private float _jumpCharge = 0f;
+        private Vector3 _position;
+        private float _groundY;
 
-        internal Vector3 Position => _position;
         internal float Yaw { get; set; }
         internal float Pitch { get; set; }
+        internal float Roll { get; set; }
         internal float JumpCharge => _jumpCharge;
+        internal Vector3 Velocity
+        {
+            get { return _velocity; }
+            set { _velocity = value; }
+        }
+        internal Vector3 Position => _position;
         public override IdentifiedTexture Texture => _texture;
 
-        public Player(Vector3 position, GameScreen screen)
+        public Player(Level level, Vector3 position, GameScreen screen)
+            : base(level)
         {
             _screen = screen;
             _texture = new IdentifiedTexture(TextureFactory.FromColor(Color.DarkGray));
             _position = position;
 
             IsVisible = false;
+            CreateCollider();
         }
 
         protected override void CreateWorld()
@@ -52,15 +62,25 @@ namespace Hardliner.Screens.Game
             Geometry.AddVertices(CylinderComposer.Create(0.1f, HEIGHT, 10));
         }
 
+        private void CreateCollider()
+        {
+            Collider = new BoxCollider(new BoundingBox(
+                new Vector3(-0.25f, 0, -0.25f) + _position, 
+                new Vector3(0.25f, HEIGHT, 0.25f) + _position));
+        }
+
         public override void Update()
         {
+            _groundY = GetGroundY();
+
             LookAround();
             Movement();
             Jump();
-            Velocity();
+            UpdateVelocity();
             Gravity();
             Rope();
-            
+
+            CreateCollider();
             CreateWorld();
         }
 
@@ -68,8 +88,9 @@ namespace Hardliner.Screens.Game
         {
             var gState = GamePad.GetState(PlayerIndex.One);
             Vector2 movement = gState.ThumbSticks.Left * new Vector2(0.02f, 0.008f);
-            
+
             _velocity += new Vector3(movement.X, 0f, -movement.Y);
+
             if (_velocity.X > MAX_SPEED)
             {
                 _velocity.X = MAX_SPEED;
@@ -87,7 +108,7 @@ namespace Hardliner.Screens.Game
                 _velocity.Z = -MAX_SPEED;
             }
 
-            if (_position.Y == 0f)
+            if (_position.Y == _groundY)
             {
                 if (_velocity.X > 0f)
                 {
@@ -118,7 +139,7 @@ namespace Hardliner.Screens.Game
 
         private void Jump()
         {
-            if (_position.Y == 0f)
+            if (_position.Y == _groundY)
             {
                 var gState = GamePad.GetState(PlayerIndex.One);
                 if (gState.IsButtonDown(Buttons.A))
@@ -137,6 +158,7 @@ namespace Hardliner.Screens.Game
                             _jumpCharge = MAX_JUMPCHARGE;
 
                         _velocity.Y += _jumpCharge;
+                        _velocity.Z -= 0.1f;
                         _jumpCharge = 0f;
                     }
                 }
@@ -150,22 +172,47 @@ namespace Hardliner.Screens.Game
 
             Yaw -= look.X;
             Pitch += look.Y;
+
+            Yaw = MathHelper.WrapAngle(Yaw);
+            Pitch = MathHelper.WrapAngle(Pitch);
+
+            if (look.X < 0f)
+            {
+                if (Roll < 0.05f)
+                {
+                    Roll -= 0.04f * look.X;
+                }
+            }
+            else if (look.X > 0f)
+            {
+                if (Roll > -0.05f)
+                {
+                    Roll -= 0.04f * look.X;
+                }
+            }
+            else
+            {
+                if (Roll != 0f)
+                {
+                    Roll = MathHelper.Lerp(Roll, 0f, 0.1f);
+                }
+            }
         }
 
         private void Gravity()
         {
-            if (_position.Y > 0f)
+            if (_position.Y > _groundY)
             {
                 _velocity.Y -= 0.01f;
             }
             else
             {
                 _velocity.Y = 0f;
-                _position.Y = 0f;
+                _position.Y = _groundY;
             }
         }
 
-        private void Velocity()
+        private void UpdateVelocity()
         {
             var rotation = Matrix.CreateRotationY(Yaw);
             var transformedVelocity = Vector3.Transform(_velocity, rotation);
@@ -176,10 +223,32 @@ namespace Hardliner.Screens.Game
         private void Rope()
         {
             var gState = GamePad.GetState(PlayerIndex.One);
-            if (gState.Triggers.Right != 0f && !_screen.HasRope)
+            if (gState.Triggers.Right != 0f && !_level.HasRope)
             {
-                _screen.AddObject(new Rope(_screen.Content, this));
+                _level.AddObject(new HookShotRope(_level, _screen.Content, this));
             }
+        }
+
+        private float GetGroundY()
+        {
+            var ground = float.MinValue;
+
+            foreach (var o in _level.Objects)
+            {
+                var colliderTop = o.Collider.Top;
+                if (colliderTop > ground && colliderTop <= Collider.Bottom)
+                {
+                    var collider = new BoxCollider(new BoundingBox(
+                        new Vector3(-0.25f + _position.X, colliderTop - 0.01f, -0.25f + _position.Z), 
+                        new Vector3(0.25f + _position.X, colliderTop + 0.01f, 0.25f + _position.Z)));
+                    if (o.Collider.Collides(collider))
+                    {
+                        ground = colliderTop;
+                    }
+                }
+            }
+            
+            return ground;
         }
     }
 }

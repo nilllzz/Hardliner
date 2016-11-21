@@ -2,6 +2,8 @@
 {
     public interface ICollider
     {
-        bool Collide(ICollider collider);
+        bool Collides(ICollider collider);
+        float Top { get; }
+        float Bottom { get; }
     }
 }

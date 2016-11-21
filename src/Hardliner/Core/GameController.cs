@@ -15,6 +15,7 @@ namespace Hardliner.Core
         internal GraphicsDeviceManager GraphicsDeviceManager { get; }
 
         internal event Action ViewportSizeChanged;
+        internal Rectangle Bounds => GraphicsDevice.Viewport.Bounds;
 
         public GameController()
         {

@@ -44,10 +44,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\CommonExtensions.cs" />
     <Compile Include="Core\Core.cs" />
     <Compile Include="Core\GameController.cs" />
     <Compile Include="Screens\Game\FirstPersonUI.cs" />
-    <Compile Include="Screens\Game\Rope.cs" />
+    <Compile Include="Screens\Game\Level.cs" />
+    <Compile Include="Screens\Game\LevelObject.cs" />
+    <Compile Include="Screens\Game\HookShotRope.cs" />
     <Compile Include="TextureFactory.cs" />
     <Compile Include="Screens\Game\GameScreen.cs" />
     <Compile Include="Screens\Game\ObserverCamera.cs" />

@@ -6,6 +6,7 @@ namespace Hardliner.Content
         
         public static class Fonts
         {
+            public const string IntroFont = "Fonts/IntroFont";
             public const string UIFont = "Fonts/UIFont";
         }
         
@@ -13,7 +14,6 @@ namespace Hardliner.Content
         {
             public const string Grid = "Textures/Grid";
             public const string Leaves = "Textures/Leaves";
-            public const string Rope = "Textures/Rope";
             public const string TreeLog = "Textures/TreeLog";
             public const string UIOverlay = "Textures/UIOverlay";
         }

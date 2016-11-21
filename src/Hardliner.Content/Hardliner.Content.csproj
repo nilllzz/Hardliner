@@ -43,6 +43,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Content.tt</DependentUpon>
     </None>
+    <None Include="Content\Fonts\IntroFont.spritefont" />
     <None Include="Content\Fonts\UIFont.spritefont" />
   </ItemGroup>
   <ItemGroup>
@@ -52,7 +53,6 @@
     </Content>
     <Content Include="Content\Textures\Grid.png" />
     <Content Include="Content\Textures\Leaves.png" />
-    <Content Include="Content\Textures\Rope.png" />
     <Content Include="Content\Textures\TreeLog.png" />
     <Content Include="Content\Textures\UIOverlay.png" />
     <Content Include="ResourceNames.tt">

@@ -42,6 +42,7 @@
     <Compile Include="Collision\BoxCollider.cs" />
     <Compile Include="Collision\ICollider.cs" />
     <Compile Include="Collision\NoCollider.cs" />
+    <Compile Include="Collision\RayCollider.cs" />
     <Compile Include="Collision\SphereCollider.cs" />
     <Compile Include="IdentifiedTexture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
