@@ -3,6 +3,7 @@ using Hardliner.Engine;
 using Hardliner.Engine.Collision;
 using Hardliner.Engine.Rendering;
 using Hardliner.Engine.Rendering.Geometry.Composers;
+using Hardliner.Screens.Game.Weapons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,48 +12,60 @@ namespace Hardliner.Screens.Game
 {
     internal class Player : LevelObject
     {
-        internal const float HEIGHT = 1.6f;
+        internal const float HEIGHT = 2f;
 
         private const float MAX_SPEED = 0.2f;
         private const float SLOWDOWN = 0.005f;
         internal const float MIN_JUMPCHARGE = 0.1f;
         internal const float MAX_JUMPCHARGE = 0.5f;
+        private const float JUMP_STRENGTH = 0.5f;
+
+        private const Buttons JETPACK_BUTTON = Buttons.LeftTrigger;
 
         private readonly GameScreen _screen;
-        private IdentifiedTexture _texture;
+        private Texture2D _texture;
         private Vector3 _velocity;
         private float _jumpCharge = 0f;
         private Vector3 _position;
-        private float _groundY;
+        private float _lookMovement = 0f;
+        private ColliderController _colliderController;
 
         internal float Yaw { get; set; }
         internal float Pitch { get; set; }
         internal float Roll { get; set; }
         internal float JumpCharge => _jumpCharge;
+        internal float JetPackCharge { get; set; }
         internal Vector3 Velocity
         {
             get { return _velocity; }
             set { _velocity = value; }
         }
-        internal Vector3 Position => _position;
-        public override IdentifiedTexture Texture => _texture;
+        internal Vector3 Position
+        {
+            get { return _position; }
+            set { _position = value; }
+        }
+        internal ClawShotGun ClawShotGun { get; private set; }
+        public override Texture2D Texture0 => _texture;
+        internal bool HasMoved { get; private set; } = false;
 
         public Player(Level level, Vector3 position, GameScreen screen)
             : base(level)
         {
             _screen = screen;
-            _texture = new IdentifiedTexture(TextureFactory.FromColor(Color.DarkGray));
+            _texture = TextureFactory.FromColor(Color.DarkGray);
             _position = position;
+            _colliderController = new ColliderController(this, level);
+            ClawShotGun = new ClawShotGun(level, this);
 
             IsVisible = false;
             CreateCollider();
+
+            Pitch = -0.4f;
         }
 
         protected override void CreateWorld()
         {
-            //World = Matrix.CreateRotationZ(MathHelper.PiOver2) *
-            //    Matrix.CreateFromYawPitchRoll(Yaw, Pitch, 0f) *
-            //    Matrix.CreateTranslation(Position);
             World = Matrix.CreateRotationZ(MathHelper.PiOver2) *
                 Matrix.CreateTranslation(Position + new Vector3(0, HEIGHT / 2, 0));
         }
@@ -65,20 +78,20 @@ namespace Hardliner.Screens.Game
         private void CreateCollider()
         {
             Collider = new BoxCollider(new BoundingBox(
-                new Vector3(-0.25f, 0, -0.25f) + _position, 
+                new Vector3(-0.25f, 0, -0.25f) + _position,
                 new Vector3(0.25f, HEIGHT, 0.25f) + _position));
         }
 
         public override void Update()
         {
-            _groundY = GetGroundY();
+            _colliderController.Update();
 
             LookAround();
             Movement();
             Jump();
             UpdateVelocity();
             Gravity();
-            Rope();
+            ClawShotGun.Update();
 
             CreateCollider();
             CreateWorld();
@@ -87,7 +100,16 @@ namespace Hardliner.Screens.Game
         private void Movement()
         {
             var gState = GamePad.GetState(PlayerIndex.One);
-            Vector2 movement = gState.ThumbSticks.Left * new Vector2(0.02f, 0.008f);
+
+            var speedVector = new Vector2(0.02f, 0.008f);
+            // when the player is off the ground and not using a jetpack, movement speed is half.
+            if (_colliderController.GroundY != _position.Y && !gState.IsButtonDown(JETPACK_BUTTON))
+            {
+                speedVector *= 0.5f;
+            }
+
+            var direction = gState.ThumbSticks.Left;
+            Vector2 movement = direction * speedVector;
 
             _velocity += new Vector3(movement.X, 0f, -movement.Y);
 
@@ -108,7 +130,7 @@ namespace Hardliner.Screens.Game
                 _velocity.Z = -MAX_SPEED;
             }
 
-            if (_position.Y == _groundY)
+            if (_position.Y == _colliderController.GroundY)
             {
                 if (_velocity.X > 0f)
                 {
@@ -139,9 +161,9 @@ namespace Hardliner.Screens.Game
 
         private void Jump()
         {
-            if (_position.Y == _groundY)
+            var gState = GamePad.GetState(PlayerIndex.One);
+            if (_position.Y == _colliderController.GroundY)
             {
-                var gState = GamePad.GetState(PlayerIndex.One);
                 if (gState.IsButtonDown(Buttons.A))
                 {
                     if (_jumpCharge == 0f)
@@ -157,10 +179,23 @@ namespace Hardliner.Screens.Game
                         if (_jumpCharge > MAX_JUMPCHARGE)
                             _jumpCharge = MAX_JUMPCHARGE;
 
-                        _velocity.Y += _jumpCharge;
-                        _velocity.Z -= 0.1f;
+                        var jumpVelocity = _jumpCharge * JUMP_STRENGTH;
+                        _velocity.Y += jumpVelocity;
+                        _velocity.Z -= jumpVelocity / 2f;
+                        JetPackCharge = MAX_JUMPCHARGE / 1.5f - _jumpCharge / 8f;
+
                         _jumpCharge = 0f;
                     }
+                }
+            }
+            else
+            {
+                if (_velocity.Y < 0.1f && JetPackCharge > 0f && gState.IsButtonDown(JETPACK_BUTTON))
+                {
+                    _velocity.Y += 0.02f;
+                    JetPackCharge -= 0.01f;
+                    if (JetPackCharge <= 0f)
+                        JetPackCharge = 0f;
                 }
             }
         }
@@ -168,13 +203,36 @@ namespace Hardliner.Screens.Game
         private void LookAround()
         {
             var gState = GamePad.GetState(PlayerIndex.One);
-            Vector2 look = gState.ThumbSticks.Right * 0.1f;
+            Vector2 look = gState.ThumbSticks.Right * 0.075f;
 
-            Yaw -= look.X;
-            Pitch += look.Y;
+            if (look.X != 0f || look.Y != 0f)
+            {
+                if (_lookMovement < 1f)
+                {
+                    _lookMovement = MathHelper.Lerp(_lookMovement, 1f, 0.15f);
+                    if (_lookMovement >= 1f)
+                        _lookMovement = 1f;
+                }
 
-            Yaw = MathHelper.WrapAngle(Yaw);
-            Pitch = MathHelper.WrapAngle(Pitch);
+                look *= _lookMovement;
+
+                var yawDiff = look.X;
+                if (yawDiff != 0f)
+                {
+                    var rotation = Matrix.CreateFromYawPitchRoll(yawDiff, 0f, 0f);
+                    _velocity = Vector3.Transform(_velocity, rotation);
+                    Yaw -= yawDiff;
+                }
+
+                Pitch += look.Y;
+
+                Yaw = MathHelper.WrapAngle(Yaw);
+                Pitch = MathHelper.WrapAngle(Pitch);
+            }
+            else
+            {
+                _lookMovement = 0f;
+            }
 
             if (look.X < 0f)
             {
@@ -201,14 +259,15 @@ namespace Hardliner.Screens.Game
 
         private void Gravity()
         {
-            if (_position.Y > _groundY)
+            if (_position.Y > _colliderController.GroundY)
             {
                 _velocity.Y -= 0.01f;
             }
             else
             {
                 _velocity.Y = 0f;
-                _position.Y = _groundY;
+                _position.Y = _colliderController.GroundY;
+                JetPackCharge = 0f;
             }
         }
 
@@ -217,38 +276,15 @@ namespace Hardliner.Screens.Game
             var rotation = Matrix.CreateRotationY(Yaw);
             var transformedVelocity = Vector3.Transform(_velocity, rotation);
 
-            _position += transformedVelocity;
-        }
+            _position = _colliderController.ChangePosition(_position, transformedVelocity, new Vector3(0.5f, 0f, 0.5f));
 
-        private void Rope()
-        {
-            var gState = GamePad.GetState(PlayerIndex.One);
-            if (gState.Triggers.Right != 0f && !_level.HasRope)
-            {
-                _level.AddObject(new HookShotRope(_level, _screen.Content, this));
-            }
-        }
+            if (transformedVelocity.Z != 0f || transformedVelocity.X != 0f)
+                HasMoved = true;
 
-        private float GetGroundY()
-        {
-            var ground = float.MinValue;
-
-            foreach (var o in _level.Objects)
-            {
-                var colliderTop = o.Collider.Top;
-                if (colliderTop > ground && colliderTop <= Collider.Bottom)
-                {
-                    var collider = new BoxCollider(new BoundingBox(
-                        new Vector3(-0.25f + _position.X, colliderTop - 0.01f, -0.25f + _position.Z), 
-                        new Vector3(0.25f + _position.X, colliderTop + 0.01f, 0.25f + _position.Z)));
-                    if (o.Collider.Collides(collider))
-                    {
-                        ground = colliderTop;
-                    }
-                }
-            }
-            
-            return ground;
+            //if (_colliderController.HadCollisionX)
+            //    _velocity.X = 0f;
+            //if (_colliderController.HadCollisionZ)
+            //    _velocity.Z = 0f;
         }
     }
 }

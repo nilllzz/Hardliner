@@ -13,7 +13,7 @@ namespace Hardliner.Screens.Game
     internal class TestTreeLog : LevelObject
     {
         private ContentManager _content;
-        private IdentifiedTexture _texture;
+        private Texture2D _texture;
         private Vector3 _position;
 
         public TestTreeLog(Level level, ContentManager content, Vector3 position)
@@ -21,12 +21,12 @@ namespace Hardliner.Screens.Game
         {
             _content = content;
             _position = position;
-            _texture = new IdentifiedTexture(content.Load<Texture2D>(Resources.Textures.TreeLog));
+            _texture = content.Load<Texture2D>(Resources.Textures.TreeLog);
 
             Collider = new BoxCollider(position, new Vector3(1, 2, 1));
         }
 
-        public override IdentifiedTexture Texture => _texture;
+        public override Texture2D Texture0 => _texture;
 
         protected override void CreateWorld()
         {
@@ -40,8 +40,8 @@ namespace Hardliner.Screens.Game
             float radius = 0.5f;
 
             Geometry.AddVertices(CylinderComposer.Create(radius, height, edges,
-                new GeometryTextureRectangle(new Rectangle(0, 0, 96, 10), _texture.Resource),
-                new GeometryTextureRectangle(new Rectangle(0, 20, 40, 40), _texture.Resource)));
+                new GeometryTextureRectangle(new Rectangle(0, 0, 96, 10), _texture),
+                new GeometryTextureRectangle(new Rectangle(0, 20, 40, 40), _texture)));
         }
     }
 }

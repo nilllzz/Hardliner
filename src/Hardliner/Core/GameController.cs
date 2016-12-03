@@ -19,6 +19,12 @@ namespace Hardliner.Core
 
         public GameController()
         {
+            var result = DoThing(
+                new Vector3(-0.5f, 0.5f, 0f),
+                new Vector3(0.5f, 0.5f, 0f),
+                new Vector3(0f, -0.5f, 1f),
+                0.25f, 0.25f);
+
             GraphicsDeviceManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
@@ -72,7 +78,7 @@ namespace Hardliner.Core
         {
             GetComponent<ScreenManager>().Draw();
 
-            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.LightBlue, 1.0f, 0);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, new Color(24, 20, 74), 1.0f, 0);
             GraphicsDevice.RasterizerState = new RasterizerState { CullMode = CullMode.None };
             GraphicsDevice.SamplerStates[0] = new SamplerState
             {
@@ -84,6 +90,17 @@ namespace Hardliner.Core
             GetComponent<ScreenManager>().Render();
 
             base.Draw(gameTime);
+        }
+
+        private float DoThing(Vector3 p1, Vector3 p2, Vector3 p3, float x, float z)
+        {
+            float det = (p2.Z - p3.Z) * (p1.X - p3.X) + (p3.X - p2.X) * (p1.Z - p3.Z);
+
+            float l1 = ((p2.Z - p3.Z) * (x - p3.X) + (p3.X - p2.X) * (z - p3.Z)) / det;
+            float l2 = ((p3.Z - p1.Z) * (x - p3.X) + (p1.X - p3.X) * (z - p3.Z)) / det;
+            float l3 = 1.0f - l1 - l2;
+
+            return l1 * p1.Y + l2 * p2.Y + l3 * p3.Y;
         }
     }
 }

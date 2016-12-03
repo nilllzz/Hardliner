@@ -14,5 +14,6 @@ namespace Hardliner.Engine.Rendering.Geometry.Texture
         public Vector2 Transform(Vector2 normalVector) => normalVector;
 
         public void NextElement() { }
+        public int GetTextureIndex() => 0;
     }
 }

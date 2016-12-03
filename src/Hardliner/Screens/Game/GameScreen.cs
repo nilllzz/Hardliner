@@ -9,33 +9,70 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Hardliner.Engine.Rendering.Sprites;
 using static Core;
+using Hardliner.Screens.Game.Hub.BuildingParts.Generators;
+using Hardliner.Screens.Game.Hub.BuildingParts.RoofTop;
+using Hardliner.Screens.Game.Hub.BuildingParts.Street;
+using Hardliner.Screens.Game.Hub.BuildingParts.General;
 
 namespace Hardliner.Screens.Game
 {
     internal class GameScreen : Screen
     {
         private Player _player;
-        private Camera _camera;
         private FirstPersonUI _ui;
         private Level _level;
+
+        internal Camera Camera { get; private set; }
 
         internal override void Activate(Screen preScreen)
         {
             base.Activate(preScreen);
 
-            _level = new Level();
+            _level = new Level(this);
 
             var floor = new TestFloor(_level, Content);
-            _player = new Player(_level, new Vector3(0, 0, 0), this);
+            _player = new Player(_level, new Vector3(0, 100, 0), this);
             _ui = new FirstPersonUI(_level, Content, _player);
+            
+            var sky = new Hub.SkyCylinder(_level, _player);
+            var light1 = new Hub.LightBarrier(_level, _player, 14);
+            var light2 = new Hub.LightBarrier(_level, _player, 18);
+            var light3 = new Hub.LightBarrier(_level, _player, 22);
+            var light4 = new Hub.LightBarrier(_level, _player, 26);
+            var light5 = new Hub.LightBarrier(_level, _player, 30);
+            var light6 = new Hub.LightBarrier(_level, _player, 34);
+            var introMachine = new Hub.IntroMachine.UpperPart(_level, Content);
 
-            var log = new TestTreeLog(_level, Content, new Vector3(0, 1, -5));
-            var log1 = new TestTreeLog(_level, Content, new Vector3(0, 2, -8));
-            var log2 = new TestTreeLog(_level, Content, new Vector3(0, 3, -12));
+            var objects = new List<LevelObject>();
+            objects.AddRange(new LevelObject[] { _player, _ui,
+                sky, light1, light2, light3, light4, light5, light6, introMachine });
 
-            _level.LoadContent(new LevelObject[] { floor, log, log1, log2, _player, _ui });
+            objects.AddRange(RoofTop1.Generate(_level, Content, 
+                new Vector3(0, 90, 0), new Vector2(20, 10), RoofTopOptions.Fans | RoofTopOptions.Entrance | RoofTopOptions.RedWarningLights));
 
-            _camera = new FirstPersonCamera(GameInstance.GraphicsDevice, _player);
+            objects.AddRange(StreetLamp.Factory(_level, Content, new Vector3(-10, 90, 0), 0f));
+            objects.AddRange(StreetLamp.Factory(_level, Content, new Vector3(-7, 90, 0), MathHelper.Pi));
+
+            objects.Add(new Sidewalk(_level, Content, new Vector3(0, 0, -7f), new Vector2(40, 4)));
+            objects.Add(new Street(_level, Content, new Vector3(0, 0, -13f), 40f, true));
+            objects.Add(new Sidewalk(_level, Content, new Vector3(0, 0, -19f), new Vector2(40, 4)));
+
+            objects.AddRange(StreetLamp.Factory(_level, Content, new Vector3(-15, 0, -8f), MathHelper.PiOver2));
+            objects.AddRange(StreetLamp.Factory(_level, Content, new Vector3(0, 0, -8f), MathHelper.PiOver2));
+            objects.AddRange(StreetLamp.Factory(_level, Content, new Vector3(15, 0, -8f), MathHelper.PiOver2));
+
+            objects.AddRange(StreetLamp.Factory(_level, Content, new Vector3(-15, 0, -18f), -MathHelper.PiOver2));
+            objects.AddRange(StreetLamp.Factory(_level, Content, new Vector3(0, 0, -18f), -MathHelper.PiOver2));
+            objects.AddRange(StreetLamp.Factory(_level, Content, new Vector3(15, 0, -18f), -MathHelper.PiOver2));
+
+            objects.Add(new WireFence(_level, Content, new Vector3(0, 0, -13f), 10f, false));
+            objects.Add(new WireFence(_level, Content, new Vector3(0.1f, 0, -13f), 10f, true));
+
+            objects.Add(new Trashcan(_level, Content, new Vector3(-5f, 0, -12f)));
+
+            _level.LoadContent(objects.ToArray(), Content);
+
+            Camera = new FirstPersonCamera(GameInstance.GraphicsDevice, _player);
             //_camera = new ObserverCamera(GameInstance.GraphicsDevice);
         }
 
@@ -46,13 +83,13 @@ namespace Hardliner.Screens.Game
 
         internal override void Render()
         {
-            _level.Render(_camera);
+            _level.Render(Camera);
         }
         
         internal override void Update()
         {
             _level.Update();
-            _camera.Update();
+            Camera.Update();
         }
     }
 }

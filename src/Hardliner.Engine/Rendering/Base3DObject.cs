@@ -16,7 +16,10 @@ namespace Hardliner.Engine.Rendering
         public IndexBuffer IndexBuffer { get; set; }
         public Matrix World { get; set; } = Matrix.Identity;
         public bool IsDisposed { get; private set; }
-        public virtual IdentifiedTexture Texture => null;
+        public virtual Texture2D Texture0 => null;
+        public virtual Texture2D Texture1 => null;
+        public virtual Texture2D Texture2 => null;
+        public virtual BlendState BlendState => null;
         protected GraphicsDevice GraphicsDevice { get; private set; }
         public bool IsVisible { get; set; } = true;
         public ICollider Collider { get; set; } = new NoCollider();

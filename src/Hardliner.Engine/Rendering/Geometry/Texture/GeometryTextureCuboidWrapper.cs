@@ -29,6 +29,12 @@ namespace Hardliner.Engine.Rendering.Geometry.Texture
             _definitions.Add(side, textureDefinition);
         }
 
+        public void AddSide(CuboidSide[] sides, IGeometryTextureDefintion textureDefinition)
+        {
+            foreach (var side in sides)
+                _definitions.Add(side, textureDefinition);
+        }
+
         public void NextElement()
         {
             _currentSideIndex++;
@@ -41,6 +47,15 @@ namespace Hardliner.Engine.Rendering.Geometry.Texture
                 return _definitions[currentSide].Transform(normalVector);
             else
                 return normalVector;
+        }
+
+        public int GetTextureIndex()
+        {
+            var currentSide = (CuboidSide)_currentSideIndex;
+            if (_definitions.ContainsKey(currentSide))
+                return _definitions[currentSide].GetTextureIndex();
+            else
+                return 0;
         }
     }
 }

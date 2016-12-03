@@ -17,5 +17,10 @@ namespace Hardliner.Core
 
             return new Vector3((float)values[0], (float)values[1], (float)values[2]);
         }
+
+        public static bool Chance(this Random rnd, int chance)
+        {
+            return rnd.Next(0, chance + 1) == 0;
+        }
     }
 }

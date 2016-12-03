@@ -7,13 +7,13 @@ namespace Hardliner.Engine.Rendering.Geometry.Composers
 {
     public static class TubeComposer
     {
-        public static VertexPositionNormalTexture[] Create(float radius, float height, int edgeCount)
+        public static VertexInput[] Create(float radius, float height, int edgeCount)
             => Create(radius, height, edgeCount, DefaultGeometryTextureDefinition.Instance);
 
-        public static VertexPositionNormalTexture[] Create(float radius, float height, int edgeCount, IGeometryTextureDefintion textureDefinition)
+        public static VertexInput[] Create(float radius, float height, int edgeCount, IGeometryTextureDefintion textureDefinition)
         {
             var edgePoints = CircleComposer.GetEdgePoints(radius, edgeCount);
-            var vertices = new List<VertexPositionNormalTexture>();
+            var vertices = new List<VertexInput>();
             var halfHeight = height / 2f;
 
             for (int i = 0; i < edgeCount; i++)

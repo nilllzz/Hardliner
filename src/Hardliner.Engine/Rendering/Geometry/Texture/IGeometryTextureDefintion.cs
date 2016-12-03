@@ -6,5 +6,6 @@ namespace Hardliner.Engine.Rendering.Geometry.Texture
     {
         void NextElement();
         Vector2 Transform(Vector2 normalVector);
+        int GetTextureIndex();
     }
 }

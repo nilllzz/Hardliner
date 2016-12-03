@@ -7,8 +7,9 @@ namespace Hardliner.Engine.Rendering.Geometry.Texture
         private int _element;
         private readonly int _totalElements;
         private readonly Vector2 _textureStart, _textureEnd;
+        private readonly int _textureindex;
 
-        public GeometryTexturePoleWrapper(Rectangle textureRectangle, Rectangle textureBounds, int elements)
+        public GeometryTexturePoleWrapper(Rectangle textureRectangle, Rectangle textureBounds, int elements, int textureIndex = 0)
         {
             _totalElements = elements;
 
@@ -16,6 +17,8 @@ namespace Hardliner.Engine.Rendering.Geometry.Texture
                 (float)textureRectangle.Top / textureBounds.Height);
             _textureEnd = new Vector2((float)textureRectangle.Width / textureBounds.Width,
                 (float)textureRectangle.Height / textureBounds.Height / _totalElements);
+
+            _textureindex = textureIndex;
         }
 
         public void NextElement()
@@ -27,5 +30,7 @@ namespace Hardliner.Engine.Rendering.Geometry.Texture
         {
             return (_textureStart + (normalVector * _textureEnd) + new Vector2(0f, _textureEnd.Y * _element));
         }
+
+        public int GetTextureIndex() => _textureindex;
     }
 }

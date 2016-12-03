@@ -25,13 +25,13 @@ namespace Hardliner.Engine.Rendering.Geometry.Composers
             return edgePoints;
         }
 
-        public static VertexPositionNormalTexture[] Create(float radius, int edgeCount)
+        public static VertexInput[] Create(float radius, int edgeCount)
             => Create(radius, edgeCount, DefaultGeometryTextureDefinition.Instance);
         
-        public static VertexPositionNormalTexture[] Create(float radius, int edgeCount, IGeometryTextureDefintion textureDefinition)
+        public static VertexInput[] Create(float radius, int edgeCount, IGeometryTextureDefintion textureDefinition)
         {
             var edgePoints = GetEdgePoints(radius, edgeCount);
-            var vertices = new List<VertexPositionNormalTexture>();
+            var vertices = new List<VertexInput>();
             var diameter = radius * 2f;
 
             for (int i = 0; i < edgeCount; i++)
@@ -42,11 +42,12 @@ namespace Hardliner.Engine.Rendering.Geometry.Composers
                     nextEdgePoint = edgePoints[i + 1];
 
                 vertices.AddRange(new[] { edgePoint, nextEdgePoint, Vector2.Zero }
-                    .Select(v => new VertexPositionNormalTexture
+                    .Select(v => new VertexInput
                     {
                         Normal = new Vector3(0, 1, 0),
                         Position = new Vector3(v.X, 0f, v.Y),
-                        TextureCoordinate = textureDefinition.Transform(new Vector2((v.X + radius) / diameter, (v.Y + radius) / diameter))
+                        TextureCoordinate = textureDefinition.Transform(new Vector2((v.X + radius) / diameter, (v.Y + radius) / diameter)),
+                        TextureIndex = textureDefinition.GetTextureIndex()
                     }));
             }
 

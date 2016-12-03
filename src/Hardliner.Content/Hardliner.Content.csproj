@@ -51,7 +51,26 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Content.mgcb</LastGenOutput>
     </Content>
+    <Content Include="Content\Shaders\Textured.fx" />
+    <Content Include="Content\Textures\CloudLayer.png" />
     <Content Include="Content\Textures\Grid.png" />
+    <Content Include="Content\Textures\Hub\Door1.png" />
+    <Content Include="Content\Textures\Hub\FanFront.png" />
+    <Content Include="Content\Textures\Hub\FanSide.png" />
+    <Content Include="Content\Textures\Hub\Floor1.png" />
+    <Content Include="Content\Textures\Hub\General\Fence.png" />
+    <Content Include="Content\Textures\Hub\General\Trashcan.png" />
+    <Content Include="Content\Textures\Hub\HouseSideWindows.png" />
+    <Content Include="Content\Textures\Hub\Intro\TitleBackground.png" />
+    <Content Include="Content\Textures\Hub\Intro\TitleFont.png" />
+    <Content Include="Content\Textures\Hub\Street\LampShade.png" />
+    <Content Include="Content\Textures\Hub\Street\SidewalkSide.png" />
+    <Content Include="Content\Textures\Hub\Street\SidewalkTop.png" />
+    <Content Include="Content\Textures\Hub\Street\StreetLamp.png" />
+    <Content Include="Content\Textures\Hub\Street\StreetNormal.png" />
+    <Content Include="Content\Textures\Hub\Wall1.png" />
+    <Content Include="Content\Textures\Hub\Wall2.png" />
+    <Content Include="Content\Textures\Hub\Wall3.png" />
     <Content Include="Content\Textures\Leaves.png" />
     <Content Include="Content\Textures\TreeLog.png" />
     <Content Include="Content\Textures\UIOverlay.png" />
@@ -70,7 +89,9 @@
       <DependentUpon>ResourceNames.tt</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

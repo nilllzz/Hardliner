@@ -13,21 +13,21 @@ namespace Hardliner.Screens.Game
     internal class TestFloor : LevelObject
     {
         private ContentManager _content;
-        private IdentifiedTexture _texture;
+        private Texture2D _texture;
 
-        public TestFloor(Level level,ContentManager content)
+        public TestFloor(Level level, ContentManager content)
             : base(level)
         {
             _content = content;
-            _texture = new IdentifiedTexture(content.Load<Texture2D>(Resources.Textures.Leaves));
-            Collider = new BoxCollider(new Vector3(0, -0.1f, 0), new Vector3(100, 0.1f, 100));
+            _texture = content.Load<Texture2D>(Resources.Textures.Leaves);
+            Collider = new BoxCollider(new Vector3(0, -0.1f, 0), new Vector3(1000, 0.1f, 1000));
         }
 
-        public override IdentifiedTexture Texture => _texture;
+        public override Texture2D Texture0 => _texture;
 
         protected override void CreateGeometry()
         {
-            var vertices = RectangleComposer.Create(100f, 100f, new GeometryTextureMultiplier(100f));
+            var vertices = RectangleComposer.Create(1000f, 1000f, new GeometryTextureMultiplier(1000f));
             
             Geometry.AddVertices(vertices);
         }

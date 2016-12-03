@@ -9,8 +9,11 @@ namespace Hardliner.Engine.Rendering
         VertexBuffer VertexBuffer { get; set; }
         IndexBuffer IndexBuffer { get; set; }
         Matrix World { get; set; }
-        IdentifiedTexture Texture { get; }
+        Texture2D Texture0 { get; }
+        Texture2D Texture1 { get; }
+        Texture2D Texture2 { get; }
         bool IsVisible { get; set; }
+        BlendState BlendState { get; }
 
         void Update();
     }

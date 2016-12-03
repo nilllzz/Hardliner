@@ -8,6 +8,10 @@ namespace Hardliner.Engine.Collision
         public BoundingBox Box { get; set; }
         public float Top => Box.Max.Y;
         public float Bottom => Box.Min.Y;
+        public float Left => Box.Min.X;
+        public float Right => Box.Max.X;
+        public float Front => Box.Min.Z;
+        public float Back => Box.Max.Z;
 
         public BoxCollider() { }
 

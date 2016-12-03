@@ -7,6 +7,10 @@ namespace Hardliner.Engine.Collision
     {
         public float Top => Sphere.Center.Y + Sphere.Radius;
         public float Bottom => Sphere.Center.Y - Sphere.Radius;
+        public float Left => Sphere.Center.X - Sphere.Radius;
+        public float Right => Sphere.Center.Y + Sphere.Radius;
+        public float Front => Sphere.Center.Z - Sphere.Radius;
+        public float Back => Sphere.Center.Z + Sphere.Radius;
         public BoundingSphere Sphere { get; set; }
         
         public bool Collides(ICollider collider)

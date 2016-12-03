@@ -11,13 +11,13 @@ namespace Hardliner.Engine.Rendering.Geometry.Composers
 {
     public static class CylinderComposer
     {
-        public static VertexPositionNormalTexture[] Create(float radius, float height, int edgeCount)
+        public static VertexInput[] Create(float radius, float height, int edgeCount)
             => Create(radius, height, edgeCount, DefaultGeometryTextureDefinition.Instance, DefaultGeometryTextureDefinition.Instance);
 
-        public static VertexPositionNormalTexture[] Create(float radius, float height, int edgeCount, 
+        public static VertexInput[] Create(float radius, float height, int edgeCount, 
             IGeometryTextureDefintion sideTexture, IGeometryTextureDefintion endTexture)
         {
-            var vertices = new List<VertexPositionNormalTexture>();
+            var vertices = new List<VertexInput>();
 
             var sides = TubeComposer.Create(radius, height, edgeCount, sideTexture);
             var end1 = CircleComposer.Create(radius, edgeCount, endTexture);
