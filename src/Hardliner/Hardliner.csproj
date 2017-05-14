@@ -49,6 +49,7 @@
     <Compile Include="Core\GameController.cs" />
     <Compile Include="Screens\Game\ColliderController.cs" />
     <Compile Include="Screens\Game\FirstPersonUI.cs" />
+    <Compile Include="Screens\Game\Hub\BuildingParts\BuildingSide\Sides.cs" />
     <Compile Include="Screens\Game\Hub\BuildingParts\General\Trashcan.cs" />
     <Compile Include="Screens\Game\Hub\BuildingParts\General\WireFence.cs" />
     <Compile Include="Screens\Game\Hub\BuildingParts\Generators\RoofTop1.cs" />
@@ -86,8 +87,8 @@
       <HintPath>..\packages\nilllzz.JoltNet.1.0.1\lib\net45\JoltNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.5.1.1679\lib\net40\MonoGame.Framework.dll</HintPath>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.6.0.1625\lib\net40\MonoGame.Framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

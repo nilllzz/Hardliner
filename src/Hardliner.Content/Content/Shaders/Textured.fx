@@ -67,9 +67,14 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 		float4 textureColor = tex2D(textureSampler0, input.TextureCoordinate);
 		return textureColor;
 	}
-	if (input.TextureIndex > 0 && input.TextureIndex < 2)
+	if (input.TextureIndex > 0.5 && input.TextureIndex < 1.5 || input.TextureIndex == 1)
 	{
 		float4 textureColor = tex2D(textureSampler1, input.TextureCoordinate);
+		return textureColor;
+	}
+	if (input.TextureIndex > 1.5 && input.TextureIndex < 2.5 || input.TextureIndex == 2)
+	{
+		float4 textureColor = tex2D(textureSampler2, input.TextureCoordinate);
 		return textureColor;
 	}
 

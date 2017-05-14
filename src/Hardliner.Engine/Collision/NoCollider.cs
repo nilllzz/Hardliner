@@ -2,6 +2,10 @@
 {
     public class NoCollider : ICollider
     {
+        private static NoCollider _instance;
+        public static NoCollider Instance
+            => _instance ?? (_instance = new NoCollider());
+
         public float Top => 0;
         public float Bottom => 0;
         public float Left => 0;

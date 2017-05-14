@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Hardliner.Content;
 using Hardliner.Engine.Collision;
+using Hardliner.Engine.Rendering.Geometry;
 using Hardliner.Engine.Rendering.Geometry.Composers;
 using Hardliner.Engine.Rendering.Geometry.Texture;
 using Microsoft.Xna.Framework;
@@ -64,9 +65,9 @@ namespace Hardliner.Screens.Game.Hub.BuildingParts.Street
             cuboidTexture.AddSide(new[] { CuboidSide.Front, CuboidSide.Back, CuboidSide.Top }, sideTexture1);
             cuboidTexture.AddSide(new[] { CuboidSide.Bottom }, bottomTexture);
 
-            Geometry.AddVertices(CuboidComposer.Create(0.8f, 0.4f, 0.4f,
-                new Vector3(0.25f, 5f, 0f),
-                cuboidTexture));
+            var topPart = CuboidComposer.Create(0.8f, 0.4f, 0.4f, cuboidTexture);
+            VertexTransformer.Offset(topPart, new Vector3(0.25f, 5f, 0f));
+            Geometry.AddVertices(topPart);
         }
 
         private class StreetLampLight : LevelObject

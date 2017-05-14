@@ -71,6 +71,8 @@
     <Content Include="Content\Textures\Hub\Wall1.png" />
     <Content Include="Content\Textures\Hub\Wall2.png" />
     <Content Include="Content\Textures\Hub\Wall3.png" />
+    <Content Include="Content\Textures\Hub\Window1.png" />
+    <Content Include="Content\Textures\Hub\Window2.png" />
     <Content Include="Content\Textures\Leaves.png" />
     <Content Include="Content\Textures\TreeLog.png" />
     <Content Include="Content\Textures\UIOverlay.png" />

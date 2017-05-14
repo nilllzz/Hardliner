@@ -51,6 +51,8 @@ namespace Hardliner.Content
                 public const string Wall1 = "Textures/Hub/Wall1";
                 public const string Wall2 = "Textures/Hub/Wall2";
                 public const string Wall3 = "Textures/Hub/Wall3";
+                public const string Window1 = "Textures/Hub/Window1";
+                public const string Window2 = "Textures/Hub/Window2";
             }
             public const string Leaves = "Textures/Leaves";
             public const string TreeLog = "Textures/TreeLog";

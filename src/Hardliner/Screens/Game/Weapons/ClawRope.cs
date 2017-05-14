@@ -13,10 +13,10 @@ namespace Hardliner.Screens.Game.Weapons
 {
     internal class ClawRope : LevelObject
     {
-        internal const float MAX_LENGTH = 35f;
-        private const float SPEED = 0.8f;
+        internal const float MAX_LENGTH = 50f;
+        private const float SPEED = 1.2f;
         private const float SIZE = 0.02f;
-        private const float MAX_REEL_IN_SPEED = 0.5f;
+        private const float MAX_REEL_IN_SPEED = 1.2f;
 
         private Texture2D _texture;
         private Player _player;

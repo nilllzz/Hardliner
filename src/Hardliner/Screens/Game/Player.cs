@@ -101,7 +101,7 @@ namespace Hardliner.Screens.Game
         {
             var gState = GamePad.GetState(PlayerIndex.One);
 
-            var speedVector = new Vector2(0.02f, 0.008f);
+            var speedVector = new Vector2(0.02f, 0.02f);
             // when the player is off the ground and not using a jetpack, movement speed is half.
             if (_colliderController.GroundY != _position.Y && !gState.IsButtonDown(JETPACK_BUTTON))
             {
@@ -109,7 +109,7 @@ namespace Hardliner.Screens.Game
             }
 
             var direction = gState.ThumbSticks.Left;
-            Vector2 movement = direction * speedVector;
+            var movement = direction * speedVector;
 
             _velocity += new Vector3(movement.X, 0f, -movement.Y);
 
@@ -203,7 +203,7 @@ namespace Hardliner.Screens.Game
         private void LookAround()
         {
             var gState = GamePad.GetState(PlayerIndex.One);
-            Vector2 look = gState.ThumbSticks.Right * 0.075f;
+            var look = gState.ThumbSticks.Right * 0.075f;
 
             if (look.X != 0f || look.Y != 0f)
             {

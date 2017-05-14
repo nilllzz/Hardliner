@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Hardliner.Core;
+﻿using Hardliner.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using static Core;
 
 namespace Hardliner.Screens.Game.Hub
@@ -30,9 +26,9 @@ namespace Hardliner.Screens.Game.Hub
             var levels = (int[])levelDefinitions.Clone();
             var targetLevels = (int[])levelDefinitions.Clone();
 
-            for (int x = 0; x < texture.Width; x++)
+            for (var x = 0; x < texture.Width; x++)
             {
-                for (int i = 0; i < levels.Length; i++)
+                for (var i = 0; i < levels.Length; i++)
                 {
                     if (levels[i] == targetLevels[i])
                     {
@@ -58,7 +54,7 @@ namespace Hardliner.Screens.Game.Hub
                         levels[i]--;
                 }
 
-                for (int y = 0; y < texture.Height; y++)
+                for (var y = 0; y < texture.Height; y++)
                 {
                     var index = x + y * texture.Width;
                     if (y < levels[3])
@@ -87,7 +83,7 @@ namespace Hardliner.Screens.Game.Hub
                 }
             }
 
-            for (int i = 0; i < clouds; i++)
+            for (var i = 0; i < clouds; i++)
             {
                 var cloudWidth = _random.Next(20, 50);
                 var cloudHeight = 0;
@@ -95,7 +91,7 @@ namespace Hardliner.Screens.Game.Hub
                 var posY = _random.Next(10, (int)(height * 0.7f));
                 var startY = 0;
 
-                for (int x = 0; x < cloudWidth; x++)
+                for (var x = 0; x < cloudWidth; x++)
                 {
                     if (x > cloudWidth / 2)
                     {
@@ -115,7 +111,7 @@ namespace Hardliner.Screens.Game.Hub
                     if (startY < 0)
                         startY = 0;
 
-                    for (int y = 0; y < cloudHeight; y++)
+                    for (var y = 0; y < cloudHeight; y++)
                     {
                         var destY = startY + posY + y;
                         var destX = posX + x;

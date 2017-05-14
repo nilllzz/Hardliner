@@ -34,17 +34,17 @@ namespace Hardliner.Screens.Game.Hub
             var rotated = new Texture2D(GameInstance.GraphicsDevice, _texture.Height, _texture.Width);
             var rotatedData = new Color[data.Length];
 
-            for (int i = 0; i < data.Length; i++)
+            for (var i = 0; i < data.Length; i++)
             {
-                int x = i;
-                int y = 0;
+                var x = i;
+                var y = 0;
                 while (x >= _texture.Width)
                 {
                     x -= _texture.Width;
                     y++;
                 }
 
-                int index = y + x * _texture.Height;
+                var index = y + x * _texture.Height;
 
                 rotatedData[index] = data[i];
             }

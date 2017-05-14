@@ -21,7 +21,7 @@ namespace Hardliner.Screens.Game
 
         public override void Update()
         {
-            bool viewChanged = false;
+            var viewChanged = false;
 
             var kState = Keyboard.GetState();
 

@@ -42,7 +42,7 @@ namespace Hardliner.Screens.Game
         {
             lock (_objects)
             {
-                for (int i = 0; i < _objects.Count(); i++)
+                for (var i = 0; i < _objects.Count(); i++)
                 {
                     if (_objects[i].ToBeRemoved)
                     {

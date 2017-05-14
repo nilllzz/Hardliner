@@ -55,7 +55,7 @@ namespace Hardliner.Screens.Game
                 new Vector3(_obj.Collider.Left, _obj.Collider.Bottom, _obj.Collider.Front + velocity.Z),
                 new Vector3(_obj.Collider.Right, _obj.Collider.Top, _obj.Collider.Back + velocity.Z)));
 
-            int i = 0;
+            var i = 0;
             bool collisionX = false, collisionZ = false;
             float setX = 0f, setZ = 0f;
 

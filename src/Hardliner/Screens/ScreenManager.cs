@@ -12,9 +12,8 @@ namespace Hardliner.Screens
         public void Initialize()
         {
             _screens = new Stack<Screen>();
-            Push(new GameScreen());
         }
-
+        
         internal void Push(Screen newScreen)
         {
             Screen preScreen = null;

@@ -16,8 +16,6 @@ namespace Hardliner.Screens.Game.Hub.BuildingParts.RoofTop
 {
     internal class Floor : LevelObject
     {
-        private static VertexInput[] VertexCache;
-
         private ContentManager _content;
         private Texture2D _texture;
         private Vector3 _position;
@@ -43,10 +41,7 @@ namespace Hardliner.Screens.Game.Hub.BuildingParts.RoofTop
 
         protected override void CreateGeometry()
         {
-            if (VertexCache == null)
-                VertexCache = RectangleComposer.Create(_size.X, _size.Y, new GeometryTextureMultiplier(_size));
-
-            Geometry.AddVertices(VertexCache);
+            Geometry.AddVertices(RectangleComposer.Create(_size.X, _size.Y, new GeometryTextureMultiplier(_size)));
         }
     }
 }

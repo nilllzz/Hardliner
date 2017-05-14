@@ -15,12 +15,8 @@ namespace Hardliner.Engine.Rendering.Geometry.Composers
 
         public static VertexInput[] Create(float width, float height, float depth)
             => Create(width, height, depth, DefaultGeometryTextureDefinition.Instance);
-
+        
         public static VertexInput[] Create(float width, float height, float depth,
-            IGeometryTextureDefintion textureDefinition)
-            => Create(width, height, depth, Vector3.Zero, textureDefinition);
-
-        public static VertexInput[] Create(float width, float height, float depth, Vector3 offset,
             IGeometryTextureDefintion textureDefinition)
         {
             var vertices = new List<VertexInput>();
@@ -30,55 +26,55 @@ namespace Hardliner.Engine.Rendering.Geometry.Composers
             var halfDepth = depth / 2f;
             var front = RectangleComposer.Create(new[]
             {
-                new Vector3(-halfWidth, halfHeight, -halfDepth) + offset,
-                new Vector3(halfWidth, halfHeight, -halfDepth) + offset,
-                new Vector3(-halfWidth, -halfHeight, -halfDepth) + offset,
-                new Vector3(halfWidth, -halfHeight, -halfDepth) + offset,
+                new Vector3(-halfWidth, halfHeight, -halfDepth),
+                new Vector3(halfWidth, halfHeight, -halfDepth),
+                new Vector3(-halfWidth, -halfHeight, -halfDepth),
+                new Vector3(halfWidth, -halfHeight, -halfDepth),
             }, textureDefinition);
             textureDefinition.NextElement();
 
             var back = RectangleComposer.Create(new[]
             {
-                new Vector3(-halfWidth, halfHeight, halfDepth) + offset,
-                new Vector3(halfWidth, halfHeight, halfDepth) + offset,
-                new Vector3(-halfWidth, -halfHeight, halfDepth) + offset,
-                new Vector3(halfWidth, -halfHeight, halfDepth) + offset,
+                new Vector3(-halfWidth, halfHeight, halfDepth),
+                new Vector3(halfWidth, halfHeight, halfDepth),
+                new Vector3(-halfWidth, -halfHeight, halfDepth),
+                new Vector3(halfWidth, -halfHeight, halfDepth),
             }, textureDefinition);
             textureDefinition.NextElement();
 
             var left = RectangleComposer.Create(new[]
             {
-                new Vector3(-halfWidth, halfHeight, -halfDepth) + offset,
-                new Vector3(-halfWidth, halfHeight, halfDepth) + offset,
-                new Vector3(-halfWidth, -halfHeight, -halfDepth) + offset,
-                new Vector3(-halfWidth, -halfHeight, halfDepth) + offset,
+                new Vector3(-halfWidth, halfHeight, -halfDepth),
+                new Vector3(-halfWidth, halfHeight, halfDepth),
+                new Vector3(-halfWidth, -halfHeight, -halfDepth),
+                new Vector3(-halfWidth, -halfHeight, halfDepth),
             }, textureDefinition);
             textureDefinition.NextElement();
 
             var right = RectangleComposer.Create(new[]
             {
-                new Vector3(halfWidth, halfHeight, -halfDepth) + offset,
-                new Vector3(halfWidth, halfHeight, halfDepth) + offset,
-                new Vector3(halfWidth, -halfHeight, -halfDepth) + offset,
-                new Vector3(halfWidth, -halfHeight, halfDepth) + offset,
+                new Vector3(halfWidth, halfHeight, -halfDepth),
+                new Vector3(halfWidth, halfHeight, halfDepth),
+                new Vector3(halfWidth, -halfHeight, -halfDepth),
+                new Vector3(halfWidth, -halfHeight, halfDepth),
             }, textureDefinition);
             textureDefinition.NextElement();
 
             var top = RectangleComposer.Create(new[]
             {
-                new Vector3(-halfWidth, halfHeight, halfDepth) + offset,
-                new Vector3(halfWidth, halfHeight, halfDepth) + offset,
-                new Vector3(-halfWidth, halfHeight, -halfDepth) + offset,
-                new Vector3(halfWidth, halfHeight, -halfDepth) + offset,
+                new Vector3(-halfWidth, halfHeight, halfDepth),
+                new Vector3(halfWidth, halfHeight, halfDepth),
+                new Vector3(-halfWidth, halfHeight, -halfDepth),
+                new Vector3(halfWidth, halfHeight, -halfDepth),
             }, textureDefinition);
             textureDefinition.NextElement();
 
             var bottom = RectangleComposer.Create(new[]
             {
-                new Vector3(-halfWidth, -halfHeight, -halfDepth) + offset,
-                new Vector3(halfWidth, -halfHeight, -halfDepth) + offset,
-                new Vector3(-halfWidth, -halfHeight, halfDepth) + offset,
-                new Vector3(halfWidth, -halfHeight, halfDepth) + offset,
+                new Vector3(-halfWidth, -halfHeight, -halfDepth),
+                new Vector3(halfWidth, -halfHeight, -halfDepth),
+                new Vector3(-halfWidth, -halfHeight, halfDepth),
+                new Vector3(halfWidth, -halfHeight, halfDepth),
             }, textureDefinition);
 
             vertices.AddRange(front);

@@ -87,11 +87,11 @@ namespace Hardliner.Screens.Game
             var random = new Random();
 
             _noise = new Texture2D[5];
-            for (int i = 0; i < _noise.Length; i++)
+            for (var i = 0; i < _noise.Length; i++)
             {
                 var texture = new Texture2D(GameInstance.GraphicsDevice, width, height);
                 var data = new Color[width * height];
-                for (int j = 0; j < data.Length; j++)
+                for (var j = 0; j < data.Length; j++)
                 {
                     var value = random.Next(10, 50) * 5;
                     data[j] = new Color(value, value, value);
@@ -147,7 +147,7 @@ namespace Hardliner.Screens.Game
                 else if (_player.ClawShotGun.Cooldown > 0)
                 {
                     var text = "";
-                    Color color = Color.Black;
+                    var color = Color.Black;
 
                     switch (rope.Status)
                     {
@@ -219,7 +219,7 @@ namespace Hardliner.Screens.Game
                 var bootItems = new List<string>();
                 var limit = (1 - (_introAlpha / 255f)) * (_bootTexts.Length);
 
-                for (int i = 0; i < limit; i++)
+                for (var i = 0; i < limit; i++)
                     bootItems.Add(_bootTexts[i]);
 
                 while (bootItems.Count > 7)

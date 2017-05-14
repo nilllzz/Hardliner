@@ -41,7 +41,7 @@ namespace Hardliner.Screens.Game
 
         private Vector3 GetFallShake()
         {
-            float shake = -_player.Velocity.Y;
+            var shake = -_player.Velocity.Y;
             if (shake > 0f)
                 return _shakeRandom.NextUnitSphereVector() * shake * 0.01f;
 

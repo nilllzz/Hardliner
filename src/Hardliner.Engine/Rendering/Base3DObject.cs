@@ -22,7 +22,7 @@ namespace Hardliner.Engine.Rendering
         public virtual BlendState BlendState => null;
         protected GraphicsDevice GraphicsDevice { get; private set; }
         public bool IsVisible { get; set; } = true;
-        public ICollider Collider { get; set; } = new NoCollider();
+        public ICollider Collider { get; set; } = NoCollider.Instance;
 
         private static VertexDeclaration GetVertexDeclaration()
             => (VertexDeclaration)typeof(VertexType).GetField(FIELD_NAME_VERTEXDECLARATION).GetValue(null);

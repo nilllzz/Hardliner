@@ -38,7 +38,7 @@ namespace Hardliner.Screens.Game.Hub
             else
             {
                 IsVisible = true;
-                int alpha = (int)(_player.Position.Y - _height);
+                var alpha = (int)(_player.Position.Y - _height);
                 if (alpha > 25)
                     alpha = 25;
                 

@@ -9,10 +9,10 @@ namespace Hardliner.Screens.Game
 {
     internal class LevelObjectCarrier : IEnumerable<LevelObject>
     {
-        private List<LevelObject> _opaqueObjects, _transparentObjects;
+        private readonly List<LevelObject> _opaqueObjects, _transparentObjects;
 
-        internal List<LevelObject> OpaqueObjects => _opaqueObjects;
-        internal List<LevelObject> TransparentObjects => _transparentObjects;
+        internal IEnumerable<LevelObject> OpaqueObjects => _opaqueObjects;
+        internal IEnumerable<LevelObject> TransparentObjects => _transparentObjects;
 
         public LevelObjectCarrier()
         {
@@ -71,7 +71,7 @@ namespace Hardliner.Screens.Game
 
         public IEnumerator<LevelObject> GetEnumerator()
         {
-            int index = 0;
+            var index = 0;
             while (index < _opaqueObjects.Count + _transparentObjects.Count)
             {
                 yield return GetItem(index);

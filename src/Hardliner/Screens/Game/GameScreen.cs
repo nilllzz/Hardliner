@@ -48,7 +48,20 @@ namespace Hardliner.Screens.Game
                 sky, light1, light2, light3, light4, light5, light6, introMachine });
 
             objects.AddRange(RoofTop1.Generate(_level, Content, 
-                new Vector3(0, 90, 0), new Vector2(20, 10), RoofTopOptions.Fans | RoofTopOptions.Entrance | RoofTopOptions.RedWarningLights));
+                new Vector3(0, 20, 0), new Vector2(20, 10), RoofTopOptions.Fans | RoofTopOptions.Entrance));
+            objects.Add(new Hub.BuildingParts.BuildingSide.Sides(_level, Content, 20, 20, 10, new Vector3(0, 0, 0)));
+
+            objects.AddRange(RoofTop1.Generate(_level, Content,
+                new Vector3(-40, 50, 0), new Vector2(30, 30), RoofTopOptions.Fans | RoofTopOptions.Entrance | RoofTopOptions.RedWarningLights));
+            objects.Add(new Hub.BuildingParts.BuildingSide.Sides(_level, Content, 30, 50, 30, new Vector3(-40, 0, 0)));
+
+            objects.AddRange(RoofTop1.Generate(_level, Content,
+                new Vector3(30, 50, 0), new Vector2(30, 30), RoofTopOptions.Fans | RoofTopOptions.Entrance | RoofTopOptions.RedWarningLights));
+            objects.Add(new Hub.BuildingParts.BuildingSide.Sides(_level, Content, 30, 50, 30, new Vector3(30, 0, 0)));
+
+            objects.AddRange(RoofTop1.Generate(_level, Content,
+                new Vector3(0, 60, -40), new Vector2(30, 30), RoofTopOptions.Fans | RoofTopOptions.Entrance | RoofTopOptions.RedWarningLights));
+            objects.Add(new Hub.BuildingParts.BuildingSide.Sides(_level, Content, 30, 60, 30, new Vector3(0, 0, -40)));
 
             objects.AddRange(StreetLamp.Factory(_level, Content, new Vector3(-10, 90, 0), 0f));
             objects.AddRange(StreetLamp.Factory(_level, Content, new Vector3(-7, 90, 0), MathHelper.Pi));
@@ -69,6 +82,7 @@ namespace Hardliner.Screens.Game
             objects.Add(new WireFence(_level, Content, new Vector3(0.1f, 0, -13f), 10f, true));
 
             objects.Add(new Trashcan(_level, Content, new Vector3(-5f, 0, -12f)));
+
 
             _level.LoadContent(objects.ToArray(), Content);
 

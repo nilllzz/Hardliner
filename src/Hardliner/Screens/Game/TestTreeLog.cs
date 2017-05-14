@@ -35,9 +35,9 @@ namespace Hardliner.Screens.Game
 
         protected override void CreateGeometry()
         {
-            int height = 2;
-            int edges = 12;
-            float radius = 0.5f;
+            var height = 2;
+            var edges = 12;
+            var radius = 0.5f;
 
             Geometry.AddVertices(CylinderComposer.Create(radius, height, edges,
                 new GeometryTextureRectangle(new Rectangle(0, 0, 96, 10), _texture),
